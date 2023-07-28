@@ -57,13 +57,14 @@ export default function Quiz(props) {
           ? i
           : {
               ...i,
-              options: i.options.map((j) =>
-                j.id !== spanId
-                  ? { ...j, selectd: false }
-                  : { ...j, selected: true }
+              options: i.options.map((o) =>
+                o.id !== spanId
+                  ? { ...o, selected: false }
+                  : { ...o, selected: true }
               ),
             }
       );
+      console.log(newData.slice(0, 5));
       setData(newData);
     }
   }
@@ -104,7 +105,7 @@ export default function Quiz(props) {
                   return (
                     <span
                       style={{
-                        backgroundColor: i.selected ? "#deebf8" : "none",
+                        backgroundColor: i.selected ? "#deebf8" : "transparent",
                       }}
                       onClick={() => clickHandle(obj.id, i.id)}
                       key={i.id}
