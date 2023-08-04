@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
+import Answers from "./Answers";
 
 export default function Quiz(props) {
   let [data, setData] = useState([]);
@@ -69,6 +70,7 @@ export default function Quiz(props) {
               ),
             }
       );
+
       setData(newData);
     }
   }
@@ -113,36 +115,12 @@ export default function Quiz(props) {
                 className="flex lg:gap-[3rem] gap-4 font-medium text-center text-sm"
                 id="answerOptions"
               >
-                {obj.options.map((i) => {
-                  return (
-                    <span
-                      style={
-                        !gameFinished
-                          ? {
-                              backgroundColor: i.selected
-                                ? "#4D5B9E"
-                                : "transparent",
-                              color: i.selected ? "white" : "inherit",
-                            }
-                          : {
-                              backgroundColor: i.correctPick
-                                ? "green"
-                                : i.selected
-                                ? "red"
-                                : "transparent",
-                              color:
-                                i.selected || i.correctPick
-                                  ? "white"
-                                  : "inherit",
-                            }
-                      }
-                      onClick={() => clickHandle(obj.id, i.id)}
-                      key={i.id}
-                    >
-                      {i.opt}
-                    </span>
-                  );
-                })}
+                <Answers
+                  options={obj.options}
+                  gameFinished={gameFinished}
+                  clickHandle={clickHandle}
+                  questionId={obj.id}
+                />
               </div>
               <div className="h-[2px] rounded-md bg-slate-300"></div>
             </div>
