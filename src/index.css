@@ -24,3 +24,6 @@ body {
     background-color: #deebf8;
   }
 }
+button[selected="false"] {
+  background-color: #000000;
+}

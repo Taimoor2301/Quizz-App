@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 export default function Quiz(props) {
   let [data, setData] = useState([]);
   let [gameFinished, setGameFinished] = useState(false);
+  let [result, setResult] = useState("");
 
   useEffect(function () {
     fetch("https://the-trivia-api.com/v2/questions")
@@ -23,24 +24,28 @@ export default function Quiz(props) {
                     isCorrect: true,
                     id: nanoid(),
                     selected: false,
+                    correctPick: true,
                   },
                   {
                     opt: i.incorrectAnswers[0],
                     isCorrect: false,
                     id: nanoid(),
                     selected: false,
+                    correctPick: false,
                   },
                   {
                     opt: i.incorrectAnswers[1],
                     isCorrect: false,
                     id: nanoid(),
                     selected: false,
+                    correctPick: false,
                   },
                   {
                     opt: i.incorrectAnswers[2],
                     isCorrect: false,
                     id: nanoid(),
                     selected: false,
+                    correctPick: false,
                   },
                 ],
               },
@@ -64,11 +69,9 @@ export default function Quiz(props) {
               ),
             }
       );
-      console.log(newData.slice(0, 5));
       setData(newData);
     }
   }
-  let [result, setResult] = useState("");
 
   function checkAnswer() {
     if (!gameFinished) {
@@ -87,7 +90,16 @@ export default function Quiz(props) {
   }
 
   return (
-    <div className=" mx-auto  pt-6 px-3 bg-[#F5F7FB]  flex flex-col align-middle justify-center lg:max-w-6xl">
+    <div
+      className="
+     mx-auto 
+    pt-6 px-3
+       bg-[#F5F7FB] 
+        flex flex-col 
+        align-middle 
+        justify-center
+         lg:max-w-6xl"
+    >
       <div className="mx-auto">
         {data.slice(0, 5).map((obj) => {
           return (
@@ -104,9 +116,26 @@ export default function Quiz(props) {
                 {obj.options.map((i) => {
                   return (
                     <span
-                      style={{
-                        backgroundColor: i.selected ? "#deebf8" : "transparent",
-                      }}
+                      style={
+                        !gameFinished
+                          ? {
+                              backgroundColor: i.selected
+                                ? "#4D5B9E"
+                                : "transparent",
+                              color: i.selected ? "white" : "inherit",
+                            }
+                          : {
+                              backgroundColor: i.correctPick
+                                ? "green"
+                                : i.selected
+                                ? "red"
+                                : "transparent",
+                              color:
+                                i.selected || i.correctPick
+                                  ? "white"
+                                  : "inherit",
+                            }
+                      }
                       onClick={() => clickHandle(obj.id, i.id)}
                       key={i.id}
                     >
