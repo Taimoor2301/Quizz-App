@@ -8,22 +8,17 @@
   padding: 0;
 }
 body {
-  font-family: poppins;
-}
-#answerOptions > span {
-  padding: 0.2rem 1rem;
-  width: 150px;
-
-  border: 2px solid #293264;
-  border-radius: 4rem;
-  cursor: pointer;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  &:hover {
-    background-color: #deebf8;
-  }
+  min-height: 100vh;
+  background-color: rgb(252, 252, 252);
 }
-button[selected="false"] {
-  background-color: #000000;
+#answerOptions > span {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+
+  overflow: hidden;
 }

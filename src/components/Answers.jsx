@@ -18,11 +18,11 @@ const Answers = (props) => {
   return data.map((i) => {
     return (
       <span
+        className="hover:shadow-xl hover:translate-y-[-5px] transition-all md:min-w-[150px] shadow-md rounded-md bg-slate-200"
         style={
           !props.gameFinished
             ? {
-                backgroundColor: i.selected ? "#4D5B9E" : "transparent",
-                color: i.selected ? "white" : "inherit",
+                backgroundColor: i.selected ? "white" : "",
               }
             : {
                 backgroundColor: i.correctPick

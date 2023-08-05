@@ -18,6 +18,7 @@ export default function Quiz(props) {
               {
                 id: i.id,
                 question: i.question.text,
+                category: i.category,
 
                 options: [
                   {
@@ -94,47 +95,60 @@ export default function Quiz(props) {
   return (
     <div
       className="
-     mx-auto 
-    pt-6 px-3
-       bg-[#F5F7FB] 
+        bg-slate-100
+        p-6
+       shadow-lg
+       rounded-md
         flex flex-col 
-        align-middle 
-        justify-center
-         lg:max-w-6xl"
-    >
-      <div className="mx-auto">
-        {data.slice(0, 5).map((obj) => {
-          return (
-            <div
-              className="text-[#293264] flex flex-col gap-2 mb-6 lg:max-w-[80%]"
-              key={obj.id}
-              id={obj.id}
-            >
-              <h2 className=" font-bold">{obj.question}</h2>
-              <div
-                className="flex lg:gap-[3rem] gap-4 font-medium text-center text-sm"
-                id="answerOptions"
-              >
-                <Answers
-                  options={obj.options}
-                  gameFinished={gameFinished}
-                  clickHandle={clickHandle}
-                  questionId={obj.id}
-                />
-              </div>
-              <div className="h-[2px] rounded-md bg-slate-300"></div>
-            </div>
-          );
-        })}
-      </div>
+       lg:max-w-[95%]
+       min-h-[90vh]
+       min-w-[80vw]
 
+         
+         
+         "
+    >
+      <h1
+        className="font-bold text-4xl  text-center my-2 mb-8
+      bg-slate-500 py-5 rounded-md shadow-md text-white "
+      >
+        QuizWiz
+      </h1>
+      {data.slice(0, 5).map((obj) => {
+        return (
+          <div
+            className="text-gray-700 flex flex-col gap-2 mb-6"
+            key={obj.id}
+            id={obj.id}
+          >
+            <div className="flex items-center">
+              <h2 className=" font-semibold my-3 mr-auto">{obj.question}</h2>
+
+              <span className="text-[.5rem] md:text-[1rem] rounded-md shadow-md p-1 mx-2 bg-slate-400 font-thin text-white">
+                {obj.category}
+              </span>
+            </div>
+            <div
+              className=" font-semibold text-center flex-wrap grid md:grid-cols-4  border-b-2 pb-3 gap-4 grid-cols-2"
+              id="answerOptions"
+            >
+              <Answers
+                options={obj.options}
+                gameFinished={gameFinished}
+                clickHandle={clickHandle}
+                questionId={obj.id}
+              />
+            </div>
+          </div>
+        );
+      })}
       {gameFinished && (
-        <div className="text-center , font-semibold text-3xl my-5">
+        <div className="text-center font-semibold text-3xl my-5 ">
           You Got {result.length} out of 5
         </div>
       )}
       <button
-        className="bg-[#4D5B9E] hover:bg-[#293264] font-bold text-xl text-white px-14 py-5 rounded-2xl self-center mb-6"
+        className=" hover:bg-gray-700 hover:text-white font-bold shadow-md bg-white px-10 py-3 rounded-xl self-center mb-4 font-[poppins]"
         onClick={checkAnswer}
       >
         {gameFinished ? "Start Again" : "Check Answer"}
