@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const Answers = (props) => {
-  let [data, setData] = useState(props.options);
+  let [data, setData] = useState([]);
   useEffect(() => {
     let x = props.options.sort(() => Math.random() - 0.5);
     setData(x);
@@ -18,19 +18,27 @@ const Answers = (props) => {
   return data.map((i) => {
     return (
       <span
-        className="hover:shadow-xl hover:translate-y-[-5px] transition-all md:min-w-[150px] shadow-md rounded-md bg-slate-200"
+        className="hover:shadow-xl hover:translate-y-[-7px]  transition-all md:min-w-[150px] shadow-md rounded-md bg-white text-blue-800"
         style={
           !props.gameFinished
             ? {
-                backgroundColor: i.selected ? "white" : "",
+                backgroundColor: i.selected ? "transparent" : "",
+                border: i.selected
+                  ? "3px solid white"
+                  : "3px solid transparent",
+                color: i.selected ? "white" : "",
               }
             : {
                 backgroundColor: i.correctPick
                   ? "green"
                   : i.selected
                   ? "red"
-                  : "transparent",
-                color: i.selected || i.correctPick ? "white" : "inherit",
+                  : "white",
+                color: i.selected || i.correctPick ? "white" : "",
+                border:
+                  i.selected || i.correctPick
+                    ? "3px solid white"
+                    : "3px solid transparent",
               }
         }
         onClick={() => {

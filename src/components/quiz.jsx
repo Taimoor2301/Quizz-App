@@ -95,7 +95,7 @@ export default function Quiz(props) {
   return (
     <div
       className="
-        bg-slate-100
+        bg-blue-800
         p-6
        shadow-lg
        rounded-md
@@ -103,6 +103,8 @@ export default function Quiz(props) {
        lg:max-w-[95%]
        min-h-[90vh]
        min-w-[80vw]
+       mx-auto
+       my-4
 
          
          
@@ -110,26 +112,26 @@ export default function Quiz(props) {
     >
       <h1
         className="font-bold text-4xl  text-center my-2 mb-8
-      bg-slate-500 py-5 rounded-md shadow-md text-white "
+      bg-white py-5 rounded-md shadow-md text-blue-700 "
       >
         QuizWiz
       </h1>
       {data.slice(0, 5).map((obj) => {
         return (
           <div
-            className="text-gray-700 flex flex-col gap-2 mb-6"
+            className="text-white flex flex-col gap-2 mb-6"
             key={obj.id}
             id={obj.id}
           >
-            <div className="flex items-center">
-              <h2 className=" font-semibold my-3 mr-auto">{obj.question}</h2>
+            <div className="flex items-center justify-between">
+              <h2 className=" font-semibold mb-3 mr-auto">{obj.question}</h2>
 
-              <span className="text-[.5rem] md:text-[1rem] rounded-md shadow-md p-1 mx-2 bg-slate-400 font-thin text-white">
+              <span className="text-[.5rem] md:text-[1rem] self-start rounded shadow-md p-1 mx-2 bg-white text-blue-800">
                 {obj.category}
               </span>
             </div>
             <div
-              className=" font-semibold text-center flex-wrap grid md:grid-cols-4  border-b-2 pb-3 gap-4 grid-cols-2"
+              className=" font-semibold text-center grid md:grid-cols-4  border-b-2 pb-3 gap-4 grid-cols-2"
               id="answerOptions"
             >
               <Answers
@@ -143,12 +145,12 @@ export default function Quiz(props) {
         );
       })}
       {gameFinished && (
-        <div className="text-center font-semibold text-3xl my-5 ">
+        <div className="text-center font-semibold text-3xl my-5 text-white border-[3px] py-3 rounded ">
           You Got {result.length} out of 5
         </div>
       )}
       <button
-        className=" hover:bg-gray-700 hover:text-white font-bold shadow-md bg-white px-10 py-3 rounded-xl self-center mb-4 font-[poppins]"
+        className="  text-blue-800 font-bold shadow-md bg-white px-10 py-3 rounded md:self-center mb-4 font-[poppins]"
         onClick={checkAnswer}
       >
         {gameFinished ? "Start Again" : "Check Answer"}
