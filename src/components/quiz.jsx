@@ -1,160 +1,90 @@
 import { useEffect, useState } from "react";
-import { nanoid } from "nanoid";
-import Answers from "./Answers";
+import Question from "./Question";
+import Loader from "./Loader";
+import { Randomize } from "../utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { VscDebugRestart } from "react-icons/vsc";
+import { IoMdSend } from "react-icons/io";
+import Modal from "./Modal";
+import logo from "../assets/svg/logo-black.svg";
 
 export default function Quiz(props) {
-  let [data, setData] = useState([]);
-  let [gameFinished, setGameFinished] = useState(false);
-  let [result, setResult] = useState("");
+	let [data, setData] = useState([]);
+	let [openModel, setOpenModal] = useState(false);
+	let totalQuestions = 10;
+	const [correctAnswer, setCorrectAnswer] = useState(0);
+	const [tries, setTries] = useState(1);
+	const [loading, setLoading] = useState(true);
+	const [gameFinished, setGameFinished] = useState(false);
 
-  useEffect(function () {
-    fetch("https://the-trivia-api.com/v2/questions")
-      .then((res) => res.json())
-      .then((data) => {
-        data.map((i) => {
-          setData((prev) => {
-            return [
-              ...prev,
-              {
-                id: i.id,
-                question: i.question.text,
-                category: i.category,
+	useEffect(() => {
+		document.body.style.overflow = openModel ? "hidden" : "auto";
+	}, [openModel]);
 
-                options: [
-                  {
-                    opt: i.correctAnswer,
-                    isCorrect: true,
-                    id: nanoid(),
-                    selected: false,
-                    correctPick: true,
-                  },
-                  {
-                    opt: i.incorrectAnswers[0],
-                    isCorrect: false,
-                    id: nanoid(),
-                    selected: false,
-                    correctPick: false,
-                  },
-                  {
-                    opt: i.incorrectAnswers[1],
-                    isCorrect: false,
-                    id: nanoid(),
-                    selected: false,
-                    correctPick: false,
-                  },
-                  {
-                    opt: i.incorrectAnswers[2],
-                    isCorrect: false,
-                    id: nanoid(),
-                    selected: false,
-                    correctPick: false,
-                  },
-                ],
-              },
-            ];
-          });
-        });
-      });
-  }, []);
+	useEffect(() => {
+		async function fetchData() {
+			setGameFinished(false);
+			setLoading(true);
+			const res = await fetch("https://the-trivia-api.com/v2/questions");
+			const data = await res.json();
+			setData(
+				data.map((item) => ({
+					question: item.question.text,
+					options: Randomize(item.incorrectAnswers, item.correctAnswer),
+					category: item.category,
+					id: item.id,
+					correctAnswer: item.correctAnswer,
+				}))
+			);
+			setLoading(false);
+		}
+		fetchData();
+	}, [tries]);
 
-  function clickHandle(mainId, spanId) {
-    if (!gameFinished) {
-      let newData = data.map((i) =>
-        i.id !== mainId
-          ? i
-          : {
-              ...i,
-              options: i.options.map((o) =>
-                o.id !== spanId
-                  ? { ...o, selected: false }
-                  : { ...o, selected: true }
-              ),
-            }
-      );
+	const onSelect = (id, option) => {
+		setData((prev) => prev.map((item) => (item.id === id ? { ...item, seletedOption: option } : item)));
+	};
 
-      setData(newData);
-    }
-  }
+	function checkAnswer() {
+		const correct = data.filter((item) => item.seletedOption === item.correctAnswer);
+		setCorrectAnswer(correct.length);
+		setGameFinished(true);
+		setOpenModal(true);
+	}
 
-  function checkAnswer() {
-    if (!gameFinished) {
-      let result = [];
-      for (let i of data) {
-        let arr = i.options.filter((j) => j.selected && j.isCorrect);
-        if (arr.length > 0) {
-          result.push(arr);
-        }
-      }
-      setResult(result);
-      setGameFinished((old) => !old);
-    } else if (gameFinished) {
-      props.startGame();
-    }
-  }
+	if (!data.length || loading) return <Loader />;
+	return (
+		<>
+			<AnimatePresence>
+				{openModel && <Modal tryAgain={setTries} correct={correctAnswer} total={totalQuestions} setOpenModal={setOpenModal} />}
+			</AnimatePresence>
+			<div className='max-w-7xl mx-auto bg-white md:rounded-xl px-5 pb-5'>
+				<div className='flex justify-center items-center'>
+					<img src={logo} className='w-44' alt='' />
+				</div>
+				<div className='border-[2px] border-indigo-500 rounded-xl p-5 flex flex-col gap-3 font-[poppins]'>
+					{data.slice(0, totalQuestions).map((q, i) => (
+						<Question key={q.id} {...q} index={i} onSelect={onSelect} gameFinished={gameFinished} />
+					))}
 
-  return (
-    <div
-      className="
-        bg-blue-800
-        p-6
-       shadow-lg
-       rounded-md
-        flex flex-col 
-       lg:max-w-[95%]
-       min-h-[90vh]
-       min-w-[80vw]
-       mx-auto
-       my-4
-
-         
-         
-         "
-    >
-      <h1
-        className="font-bold text-4xl  text-center my-2 mb-8
-      bg-white py-5 rounded-md shadow-md text-blue-700 "
-      >
-        QuizWiz
-      </h1>
-      {data.slice(0, 5).map((obj) => {
-        return (
-          <div
-            className="text-white flex flex-col gap-2 mb-6"
-            key={obj.id}
-            id={obj.id}
-          >
-            <div className="flex items-center justify-between">
-              <h2 className=" font-semibold mb-3 mr-auto">{obj.question}</h2>
-
-              <span className="text-[.5rem] md:text-[1rem] self-start rounded shadow-md p-1 mx-2 bg-white text-blue-800">
-                {obj.category}
-              </span>
-            </div>
-            <div
-              className=" font-semibold text-center grid md:grid-cols-4  border-b-2 pb-3 gap-4 grid-cols-2"
-              id="answerOptions"
-            >
-              <Answers
-                options={obj.options}
-                gameFinished={gameFinished}
-                clickHandle={clickHandle}
-                questionId={obj.id}
-              />
-            </div>
-          </div>
-        );
-      })}
-      {gameFinished && (
-        <div className="text-center font-semibold text-3xl my-5 text-white border-[3px] py-3 rounded ">
-          You Got {result.length} out of 5
-        </div>
-      )}
-      <button
-        className="  text-blue-800 font-bold shadow-md bg-white px-10 py-3 rounded md:self-center mb-4 font-[poppins]"
-        onClick={checkAnswer}
-      >
-        {gameFinished ? "Start Again" : "Check Answer"}
-      </button>
-    </div>
-  );
+					<button
+						className='p-2 md:w-52 md:self-center bg-indigo-500 rounded-xl text-white text-lg font-semibold tracking-wider font-[poppins] hover:bg-indigo-600 transition-all hover:scale-[1.01]'
+						onClick={() => {
+							gameFinished ? setTries(tries + 1) : checkAnswer();
+						}}>
+						{gameFinished ? <ButtonText text='Try Again' Icon={VscDebugRestart} /> : <ButtonText text='Submit' Icon={IoMdSend} />}
+					</button>
+				</div>
+			</div>
+		</>
+	);
 }
+
+const ButtonText = ({ text, Icon }) => {
+	return (
+		<span className='flex justify-center items-center gap-2 group'>
+			{text}{" "}
+			<Icon className={`${text === "Submit" ? "group-hover:translate-x-2" : "group-hover:-rotate-[270deg] duration-500"} scale-105 transition-all`} />
+		</span>
+	);
+};
