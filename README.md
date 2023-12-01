@@ -1,3 +1,3 @@
 Quizzwizz by Taimoor!
 
-live site : www.quizzwizz.netlify.app
+live site : quizzwizz.netlify.app
