@@ -23,6 +23,6 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .bg1 {
-	background-image: url(./assets/bgimg.jpg);
+	/* background-image: url(./assets/bgimg.jpg); */
 	background-size: contain;
 }
