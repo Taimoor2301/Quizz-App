@@ -1,11 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import Question from "./Question";
-import Loader from "./Loader";
+import Question from "../components/Question";
+import Loader from "../components/Loader";
 import { Randomize } from "../utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { VscDebugRestart } from "react-icons/vsc";
 import { IoMdSend } from "react-icons/io";
-import Modal from "./Modal";
+import Modal from "../components/Modal";
 import gsap from "gsap";
 
 export default function Quiz() {

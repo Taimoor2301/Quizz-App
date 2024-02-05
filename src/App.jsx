@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
-import Intro from "./components/Intro.jsx";
-import Quiz from "./components/Quiz.jsx";
+import Intro from "./Pages/Intro.jsx";
+import Quiz from "./Pages/Quiz.jsx";
 //
 function App() {
   return (
