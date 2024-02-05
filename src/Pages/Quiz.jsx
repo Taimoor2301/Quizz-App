@@ -48,7 +48,7 @@ export default function Quiz() {
     }, [main]);
 
     return () => ctx.revert();
-  }, [data]);
+  }, [loading]);
 
   const onSelect = (id, option, index) => {
     setData((prev) =>
